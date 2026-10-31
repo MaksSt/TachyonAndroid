@@ -9,8 +9,7 @@
 Неофициальный Android-клиент на Flutter и Material 3 для
 [Tachyon Core](https://github.com/Dushnilin/tachyon-core) от Dushnilin.
 Проект не является официальным приложением автора ядра.
-Название приложения в Android — **Tachyon Client**. Это отдельный проект:
-код и интерфейс INCY не используются.
+Название приложения в Android — **Tachyon Client**.
 Минимальная версия — Android 10 (API 29), согласно требованиям пакетного моста HEV.
 
 ## Возможности
