@@ -12,6 +12,10 @@
 Название приложения в Android — **Tachyon Client**.
 Минимальная версия — Android 10 (API 29), согласно требованиям пакетного моста HEV.
 
+Готовые APK: [GitHub Releases](https://github.com/MaksSt/TachyonAndroid/releases).
+Для современных телефонов выбирайте `arm64-v8a`; также доступны `x86_64`
+и `universal` с обеими архитектурами.
+
 ## Возможности
 
 - Профили VLESS, Trojan, Hysteria2 и JSON одного outbound Tachyon.
@@ -283,16 +287,16 @@ QR проверены тестами. DNS-экран проверен в release
 - Ядро: [Dushnilin/tachyon-core](https://github.com/Dushnilin/tachyon-core),
   автор Dushnilin. Используется неизменённый бинарник по его отдельной
   [binary license](https://github.com/Dushnilin/tachyon-core/blob/main/LICENSE).
-  Он не включается в Git и не публикуется этим проектом.
+  Он не включается в Git; в готовых APK распространяется с разрешения автора ядра.
 - Пакетный мост: [heiher/hev-socks5-tunnel](https://github.com/heiher/hev-socks5-tunnel).
 - QR: [mobile_scanner](https://github.com/juliansteenbakker/mobile_scanner),
   BSD-3-Clause, CameraX и локальная модель ML Kit. Кадры камеры приложением не отправляются на сервер.
 
 Публикация исходников клиента не предоставляет прав на стороннее ядро.
 Текущая лицензия Tachyon Core ограничивает распространение его бинарников,
-в том числе внутри APK. Перед публикацией APK с ядром необходимо получить
-письменное разрешение правообладателя. Этот репозиторий публикует исходники
-клиента без нативных бинарников и готовых APK.
+в том числе внутри APK. APK этого проекта публикуются с разрешения автора ядра;
+это не изменяет лицензию Tachyon Core. Исходный репозиторий не содержит нативных
+бинарников; готовые APK размещаются отдельно в GitHub Releases.
 
 Профили, API-ключи, пользовательские конфигурации, ключи подписи и каталоги
 `.local`/`jniLibs` нельзя добавлять в коммиты.
