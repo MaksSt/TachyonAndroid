@@ -1,7 +1,7 @@
 param(
     [string]$DeviceId = 'emulator-5554',
     [switch]$VerboseLogs,
-    [ValidateSet('native_contract_test.dart', 'vpn_traffic_test.dart', 'settings_navigation_test.dart', 'subscription_diagnostic_test.dart', 'subscription_import_test.dart', 'subscription_hosts_test.dart')]
+    [ValidateSet('native_contract_test.dart', 'vpn_traffic_test.dart', 'settings_navigation_test.dart', 'profile_sort_test.dart', 'core_background_update_test.dart', 'subscription_diagnostic_test.dart', 'subscription_import_test.dart', 'subscription_hosts_test.dart')]
     [string]$TestFile = 'native_contract_test.dart',
     [string]$SubscriptionFile,
     [string[]]$ProfileEndpointIds = @()

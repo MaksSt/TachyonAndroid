@@ -1,7 +1,7 @@
 name: tachyon_client
 description: Собственный Android-клиент для Tachyon Core.
 publish_to: none
-version: 0.1.0+261031010
+version: 0.1.1+261031019
 
 environment:
   sdk: ^3.13.7

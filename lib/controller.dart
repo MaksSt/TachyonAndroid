@@ -55,6 +55,8 @@ class NativeApi {
   );
 }
 
+enum ProfileSort { original, latency }
+
 class ClientController extends ChangeNotifier {
   ClientController(this.api, {HttpFetch? fetch}) : fetch = fetch ?? fetchHttps;
   final NativeApi api;
@@ -75,12 +77,29 @@ class ClientController extends ChangeNotifier {
   DnsSettings dns = const DnsSettings();
   bool sendHwid = true;
   bool privacyMode = false;
+  ProfileSort profileSort = ProfileSort.original;
   bool pingingAll = false;
   int pingCompleted = 0, pingTotal = 0;
-  List<Profile> get orderedProfiles => [
-    ...profiles.where((p) => p.pinned),
-    ...profiles.where((p) => !p.pinned),
-  ];
+  List<Profile> get orderedProfiles {
+    final ordered = profiles.indexed.toList();
+    ordered.sort((a, b) {
+      if (a.$2.pinned != b.$2.pinned) return a.$2.pinned ? -1 : 1;
+      if (profileSort == ProfileSort.latency) {
+        final first = latency[a.$2.id];
+        final second = latency[b.$2.id];
+        final firstValid = first != null && first > 0;
+        final secondValid = second != null && second > 0;
+        if (firstValid != secondValid) return firstValid ? -1 : 1;
+        if (firstValid && secondValid) {
+          final comparison = first.compareTo(second);
+          if (comparison != 0) return comparison;
+        }
+      }
+      return a.$1.compareTo(b.$1);
+    });
+    return ordered.map((entry) => entry.$2).toList();
+  }
+
   List<Map<String, dynamic>> get orderedSubscriptions => [
     ...subscriptions.where((s) => s['pinned'] == true),
     ...subscriptions.where((s) => s['pinned'] != true),
@@ -130,6 +149,9 @@ class ClientController extends ChangeNotifier {
         tone = AppTone.parse(data['tone']);
         dns = DnsSettings.fromJson(data['dns']);
         privacyMode = data['privacyMode'] == true;
+        profileSort = data['profileSort'] == ProfileSort.latency.name
+            ? ProfileSort.latency
+            : ProfileSort.original;
         if ((data['schema'] as int? ?? 1) < 2) {
           for (var i = 0; i < profiles.length; i++) {
             profiles[i] = profiles[i].renamed(
@@ -171,6 +193,7 @@ class ClientController extends ChangeNotifier {
       'dns': dns.toJson(),
       'sendHwid': sendHwid,
       'privacyMode': privacyMode,
+      'profileSort': profileSort.name,
       'profiles': profiles.map((p) => p.toJson()).toList(),
       'subscriptions': subscriptions,
       'selectedId': selectedId,
@@ -188,6 +211,7 @@ class ClientController extends ChangeNotifier {
       final oldDns = dns;
       final oldHwid = sendHwid;
       final oldPrivacy = privacyMode;
+      final oldProfileSort = profileSort;
       try {
         change();
         await persist();
@@ -204,6 +228,7 @@ class ClientController extends ChangeNotifier {
         dns = oldDns;
         sendHwid = oldHwid;
         privacyMode = oldPrivacy;
+        profileSort = oldProfileSort;
         _notify();
         rethrow;
       }
@@ -215,6 +240,9 @@ class ClientController extends ChangeNotifier {
     );
     return operation;
   }
+
+  Future<void> setProfileSort(ProfileSort value) =>
+      _change(() => profileSort = value);
 
   Future<void> refreshStatus() async {
     if (_polling || _disposed) return;

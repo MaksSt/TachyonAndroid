@@ -538,9 +538,37 @@ class _ClientScreenState extends State<ClientScreen> {
                 ],
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: Text(
-                    'Профили · ${visible.length}',
-                    style: Theme.of(context).textTheme.titleMedium,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'Профили · ${visible.length}',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                      ),
+                      if (client.profiles.isNotEmpty)
+                        PopupMenuButton<ProfileSort>(
+                          tooltip: 'Сортировка серверов',
+                          icon: const Icon(Icons.sort_rounded),
+                          initialValue: client.profileSort,
+                          onSelected: (value) =>
+                              guarded(() => client.setProfileSort(value)),
+                          itemBuilder: (_) => [
+                            CheckedPopupMenuItem(
+                              value: ProfileSort.original,
+                              checked:
+                                  client.profileSort == ProfileSort.original,
+                              child: const Text('Как в подписке'),
+                            ),
+                            CheckedPopupMenuItem(
+                              value: ProfileSort.latency,
+                              checked:
+                                  client.profileSort == ProfileSort.latency,
+                              child: const Text('По задержке'),
+                            ),
+                          ],
+                        ),
+                    ],
                   ),
                 ),
                 if (client.profiles.isEmpty)
